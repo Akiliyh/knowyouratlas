@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/mb/style.css">
+<meta charset="utf-8">
+<title>KNOW YOUR ATLAS</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
+<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+</head>
+<header>
+    <h1> <a href=".">KNOW YOUR ATLAS</a></h1>
+</header>
+<body>
+    <div class="home">
+    <div class="grid">
+        <div class="left-section">  
+            <div>
+              <h2>Do you know your atlas?</h2>
+              <div class="underline-bar"></div>
+            </div>
+              <p>Know Your Atlas is a geography game using 3D maps. The goal is to guess the location point where you are randomly put into as fast as possible. Based on the chosen difficult your only hints are relief features from zoomed maps. Will you be able to guess the correct location?</p>
+              <div class="buttons">
+                  <button class="play-btn">Play now</button>
+                  <button class="daily">Daily</button>
+              </div>
+            </div>
+        <div class="right-section">   
+            <img class="earth" src="/mb/img/earth.png" alt="">
+            </div>
+    </div>
+    <div class="pattern"></div>
+    <div class="bar"></div>
+</div>
+<div class="game-modes">
+    <div>
+        <div class="game-modes-section">  
+            <div>
+              <h2>Are you ready?</h2>
+              <div class="underline-bar"></div>
+            </div>
+            <p>Choose your game mode</p>
+              <div class="game-modes-btns">
+                  <button class="easy-btn">
+                      <h3>Easy</h3>
+                      <svg class="info" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"/><title>Take it easy, you have labels to help you!</title></svg>
+                  </button>
+                  <button class="normal-btn">
+                      <h3>Normal</h3>
+                      <svg class="info" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"/><title>Normal mode of KYA. Test your geography skills!</title></svg></button>
+                  <button class="nmtz-btn">
+                      <h3>NMTZ</h3>
+                      <svg class="info" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"/><title>No Move, no Tilt and no Zoom. This mode is only for Geography GOATs</title></svg></button>
+              </div>
+            </div>
+    <div class="pattern"></div>
+    <div class="bar"></div>
+</div>
+</div>
+    <div class="game">
+<div id="map"></div>
+<div class="buttons">
+<button class="change">Change location</button>
+<button class="reset">Reset location</button>
+</div>
+<div class="guessSection">
+<div class="guessDiv">
+<div id="guessMap"></div>
+</div>
+<button class="guess">Validate point</button>
+</div>
+<div class="distanceSection">
+<div class="distance"></div>
+<progress class="pointBar" max="1000"> </progress>
+<div class="points"></div>
+</div>
+<button class="next">Next Round</button>
+</div>
+<script src="/mb/main.js"></script>
+</body>
+</html>
