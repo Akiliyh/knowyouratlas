@@ -157,6 +157,7 @@ if (e.ctrlKey && e.which == 81) {
   };
 
 guessBtn.addEventListener('click', (e) => {
+    /*resetTimer();*/
 
     /*map.setStyle('mapbox://styles/akiliyh/cl9pdy42q00ns15l3f0kz8o46');*/ // Style load poses problème, coupure + réafficher point de départ 
     /*map.on('style.load', e =>{*/
@@ -307,6 +308,7 @@ guessBtn.addEventListener('click', (e) => {
 });
 
 nextBtn.addEventListener('click', (e) => {
+    /*resetTimer();*/
     map.removeLayer('guessPoint');
     map.removeSource('guessPoint');
     map.removeLayer('route');
@@ -323,6 +325,7 @@ function randomIntFromInterval(min, max) { // min and max included
 }
 
 function changeLoc(e) {
+    /*startTimer();*/
     console.clear();
     function isInsideCountry(data) {
         if (map.getSource('countriesIn') != undefined && map.getLayer('countriesIn') != undefined) {
@@ -419,7 +422,7 @@ function changeLoc(e) {
 
 }
 }
-fetch('/mb/geojson/map.geojson')
+fetch('/geojson/map.geojson')
     .then(function (response) {
         return response.json();
     })
@@ -488,3 +491,70 @@ function resetLoc(e) {
 }
 
 });
+
+/* TIMER TO ADD */
+/* TIMER TO ADD */
+/* TIMER TO ADD */
+/* TIMER TO ADD */
+/* TIMER TO ADD */
+
+let hour = 0;
+let minute = 0;
+let second = 0;
+let millisecond = 0;
+let stopwatch = document.querySelector('.timer');
+
+
+let cron;
+
+function startTimer() {
+  clearInterval(cron);
+  cron = setInterval(() => {
+    timer();
+  }, 10);
+  console.log(cron);
+}
+
+// régler problème timer qui ne s'update pas quand tu quitte la page, faire en sorte garder time dans local storage when initialisation and compare with time when going back
+// mauvaises secondes ?? pour 10 ms on augmente les milli de 15 mais ça semble ok à l'oeil jsp
+
+function resetTimer() {
+  hour = 0;
+  minute = 0;
+  second = 0;
+  millisecond = 0;
+  document.querySelector('.hour').innerText = '00';
+  document.querySelector('.minute').innerText = '00';
+  document.querySelector('.second').innerText = '00';
+  document.querySelector('.millisecond').innerText = '000';
+}
+
+function timer() {
+  if ((millisecond += 15) > 1000) {
+    millisecond = 0;
+    second++;
+  }
+  if (second == 60) {
+    second = 0;
+    minute++;
+  }
+  if (minute == 60) {
+    minute = 0;
+    hour++;
+  }
+  document.querySelector('.hour').innerText = returnData(hour);
+  document.querySelector('.minute').innerText = returnData(minute);
+  document.querySelector('.second').innerText = returnData(second);
+  document.querySelector('.millisecond').innerText = returnDataMilli(millisecond);
+}
+
+function returnData(input) {
+  return input > 9 ? input : `0${input}`
+}
+
+function returnDataMilli(input) {
+  if (input < 100) {
+    input = '0' + input;
+  }
+  return input > 9 ? input : `0${input}`
+}

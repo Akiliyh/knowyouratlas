@@ -1,13 +1,13 @@
 @font-face {
     font-family: 'Gilroy ExtraBold';
-    src: url('/mb/fonts/Gilroy-ExtraBold.otf') format('opentype');
+    src: url('/fonts/Gilroy-ExtraBold.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Manrope';
-    src: url('/mb/fonts/regular.otf') format('opentype');
+    src: url('/fonts/regular.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
@@ -378,4 +378,48 @@ progress::-moz-progress-bar {
   
 progress.perfect::-moz-progress-bar {
     background: #B70C3E !important;
+  }
+
+
+/* to add */
+
+.transition{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #000023;
+    animation: transitionAnimation 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    z-index: 1;
+  }
+  
+  @keyframes transitionAnimation {
+    from {
+      height: 100vh;
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  .home{
+    transform: translateY(0);
+    animation: BodyShowAnimation 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    width: 100vw;
+    overflow: hidden;
+    height: 100vh;
+  }
+  
+  @keyframes BodyShowAnimation {
+    from {
+      transform: translateY(100px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  html{
+    overflow: hidden;
   }

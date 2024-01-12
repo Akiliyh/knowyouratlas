@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="/mb/style.css">
+    <link rel="stylesheet" href="/style.css">
 <meta charset="utf-8">
 <title>KNOW YOUR ATLAS</title>
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
@@ -14,6 +14,7 @@
 </header>
 <body>
     <div class="home">
+    <div class="transition"></div> <!-- TO ADD -->
     <div class="grid">
         <div class="left-section">  
             <div>
@@ -27,7 +28,7 @@
               </div>
             </div>
         <div class="right-section">   
-            <img class="earth" src="/mb/img/earth.png" alt="">
+            <img class="earth" src="/img/earth.png" alt="">
             </div>
     </div>
     <div class="pattern"></div>
@@ -60,10 +61,20 @@
 </div>
     <div class="game">
 <div id="map"></div>
-<div class="buttons">
-<button class="change">Change location</button>
-<button class="reset">Reset location</button>
-</div>
+
+<!-- TO ADD -->
+    <div class="timer" style="visibility: visible;">
+      <span class="hour">00</span>:<span class="minute">00</span>:<span class="second">37</span>:<span class="millisecond">435</span>
+    </div>
+    <div class="buttons">
+      <button class="reset">Reset location</button>
+      <button class="new">New location</button>
+      </div>
+    <div class="round">
+      <span class="numberOfRound">1</span>/<span>5</span>
+    </div>
+    <!-- TO ADD -->
+    
 <div class="guessSection">
 <div class="guessDiv">
 <div id="guessMap"></div>
@@ -77,6 +88,6 @@
 </div>
 <button class="next">Next Round</button>
 </div>
-<script src="/mb/main.js"></script>
+<script src="/main.js"></script>
 </body>
 </html>
