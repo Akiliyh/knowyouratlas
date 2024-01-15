@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/mb/style.css">
+<meta charset="utf-8">
+<title>KNOW YOUR ATLAS</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
+<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+</head>
+<header>
+    <h1> <a href=".">KNOW YOUR ATLAS</a></h1>
+</header>
+<body>
+<div id="map"></div>
+<div class="buttons">
+<button class="change">Change location</button>
+<button class="reset">Reset location</button>
+</div>
+<div class="guessSection">
+<div class="guessDiv">
+<div id="guessMap"></div>
+</div>
+<button class="guess">Validate point</button>
+</div>
+<div class="distanceSection">
+<div class="distance"></div>
+<progress class="pointBar" max="1000"> </progress>
+<div class="points"></div>
+</div>
+<button class="next">Next Round</button>
+<script src="/mb/mainrecover.js"></script>
+</body>
+</html>
