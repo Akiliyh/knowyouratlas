@@ -276,10 +276,14 @@ button.nmtz-btn .info{
     justify-content: center;
 }
 
-.result-round, .resultsPoints{
-    display: flex;
+.resultsPoints{
     margin-left: auto;
     margin-right: auto;
+}
+
+.result-round, .resultsPoints{
+    display: flex;
+    width: fit-content;
 }
 
 .timer span{
@@ -537,6 +541,11 @@ height: 400px;
     border-radius: 10px;
 }
 
+.distanceSection .flag-icon{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 .next, .resultsBtn{
     position: absolute;
     bottom: 0;
@@ -556,6 +565,21 @@ height: 400px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
+
+.results-box{
+    background-color: #000023;
+    padding: 2em;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .results .countryFlag{
@@ -565,7 +589,7 @@ height: 400px;
 .results .buttons{
     margin-left: auto;
     margin-right: auto;
-    margin-top: 100px;
+    margin-top: 50px;
     flex-direction: column;
     gap: 10px;
     align-items: center;
@@ -705,9 +729,10 @@ progress.perfect::-moz-progress-bar {
     background: #B70C3E !important;
   }
 
-  .results .round{
+  .result-round{
     display: flex;
     gap: 10px;
+    width: fit-content;
   }
 
   .countryFlag{

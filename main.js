@@ -90,6 +90,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function displayResults(e) {
+        let currentMode = 'Normal';
+        if (NMTZMode === true) {
+            currentMode = "NMTZ";
+        }
+        if (easyMode === true) {
+            currentMode = "Easy";
+        }
         transition.classList.remove('activated');
         container.classList.remove('activated');
         setTimeout(() => {
@@ -97,6 +104,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
             container.classList.add('activated');
         }, 10);
         gameDiv.remove();
+
+        const resultsBox = document.createElement('div');
+        resultsBox.classList.add('results-box');
+        resultsDiv.appendChild(resultsBox);
+
+        const resultsTitle = document.createElement('h1');
+        resultsTitle.classList.add('results-title');
+
+        resultsTitle.innerHTML = 'Results:';
+        resultsBox.appendChild(resultsTitle);
+
         for (let i = 0; i <= 4; i++) {
             const roundDiv = document.createElement('div');
             roundDiv.classList.add('result-round', `round-${i}`);
@@ -122,7 +140,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
             const pointsDiv = document.createElement('div');
             pointsDiv.classList.add('points');
-            pointsDiv.innerHTML = resultsArray[0].points[i];
+            pointsDiv.innerHTML = resultsArray[0].points[i] + ' Points';
             roundDiv.appendChild(pointsDiv);
 
             const distanceDiv = document.createElement('div');
@@ -130,7 +148,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             distanceDiv.innerHTML = resultsArray[1].distance[i];
             roundDiv.appendChild(distanceDiv);
 
-            resultsDiv.appendChild(roundDiv);
+            resultsBox.appendChild(roundDiv);
         }
 
         const resultsPoints = document.createElement('div');
@@ -142,7 +160,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }
 
         resultsPoints.innerHTML = `Total Points: ${totalPoints}/5000`;
-        resultsDiv.appendChild(resultsPoints);
+        resultsBox.appendChild(resultsPoints);
+
+        const resultsMode = document.createElement('div');
+        resultsMode.classList.add('resultsMode');
+
+        resultsMode.innerHTML = `${currentMode} Mode`;
+        resultsBox.appendChild(resultsMode);
 
         const anchorElement = document.createElement('a');
         anchorElement.href = './';
@@ -183,13 +207,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
         // Append the div to the document body or any other desired parent element
         resultsDiv.appendChild(buttonsDiv);
-        let currentMode = 'Normal';
-        if (NMTZMode === true) {
-            currentMode = "NMTZ";
-        }
-        if (easyMode === true) {
-            currentMode = "Easy";
-        }
 
         function isCountryCorrectEmoji(value) {
            return value ? '✅' : '❌'
@@ -830,4 +847,3 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
 });
-
