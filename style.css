@@ -2,7 +2,7 @@
 
 @font-face {
     font-family: 'Manrope';
-    src: url('/mb/fonts/regular.otf') format('opentype');
+    src: url('./fonts/regular.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }

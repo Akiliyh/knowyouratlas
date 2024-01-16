@@ -73,6 +73,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let closeMenuBtn = document.querySelector('.fa-xmark');
     let menu = document.querySelector('.social-media-burger');
     let resultsArray = [];
+    let currentCountryData = null;
+    let currentCountry = null;
+    let currentCountryPoly = null;
     playBtn.addEventListener('click', displayGameModes);
     resultsBtn.addEventListener('click', displayResults);
     burgerMenu.addEventListener('click', displayMenu);
@@ -97,6 +100,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
         for (let i = 0; i <= 4; i++) {
             const roundDiv = document.createElement('div');
             roundDiv.classList.add('result-round', `round-${i}`);
+
+            const isCountryCorrectDiv = document.createElement('div');
+            isCountryCorrectDiv.classList.add('is-country-correct');
+            isCountryCorrectDiv.innerHTML = isCountryCorrectEmoji(resultsArray[3].isCountryCorrect[i]);
+            roundDiv.appendChild(isCountryCorrectDiv);
 
             const timeDiv = document.createElement('div');
             timeDiv.classList.add('time');
@@ -183,16 +191,20 @@ window.addEventListener('DOMContentLoaded', (event) => {
             currentMode = "Easy";
         }
 
+        function isCountryCorrectEmoji(value) {
+           return value ? '✅' : '❌'
+        }
+
         copyBtnElement.addEventListener('click', async () => {
             // Replace 'i' with your desired index value
             const resultText = `🌍 Know Your Atlas (@KnowYourAtlasGame)
         ${currentMode} Mode - ${totalPoints}/5000 - ${new Date().toDateString()}
         
-        ❌ ${cca2ToFlagEmoji(resultsArray[2].country[0])}  ${resultsArray[4].time[0]} | ${resultsArray[1].distance[0]} | ${resultsArray[0].points[0]} Points
-        ✅ ${cca2ToFlagEmoji(resultsArray[2].country[1])}  ${resultsArray[4].time[1]} | ${resultsArray[1].distance[1]} | ${resultsArray[0].points[1]} Points
-        ❌ ${cca2ToFlagEmoji(resultsArray[2].country[2])}  ${resultsArray[4].time[2]} | ${resultsArray[1].distance[2]} | ${resultsArray[0].points[2]} Points
-        ❌ ${cca2ToFlagEmoji(resultsArray[2].country[3])}  ${resultsArray[4].time[3]} | ${resultsArray[1].distance[3]} | ${resultsArray[0].points[3]} Points
-        ❌ ${cca2ToFlagEmoji(resultsArray[2].country[4])}  ${resultsArray[4].time[4]} | ${resultsArray[1].distance[4]} | ${resultsArray[0].points[4]} Points
+        ${isCountryCorrectEmoji(resultsArray[3].isCountryCorrect[0])} ${cca2ToFlagEmoji(resultsArray[2].country[0])}  ${resultsArray[4].time[0]} | ${resultsArray[1].distance[0]} | ${resultsArray[0].points[0]} Points
+        ${isCountryCorrectEmoji(resultsArray[3].isCountryCorrect[1])} ${cca2ToFlagEmoji(resultsArray[2].country[1])}  ${resultsArray[4].time[1]} | ${resultsArray[1].distance[1]} | ${resultsArray[0].points[1]} Points
+        ${isCountryCorrectEmoji(resultsArray[3].isCountryCorrect[2])} ${cca2ToFlagEmoji(resultsArray[2].country[2])}  ${resultsArray[4].time[2]} | ${resultsArray[1].distance[2]} | ${resultsArray[0].points[2]} Points
+        ${isCountryCorrectEmoji(resultsArray[3].isCountryCorrect[3])} ${cca2ToFlagEmoji(resultsArray[2].country[3])}  ${resultsArray[4].time[3]} | ${resultsArray[1].distance[3]} | ${resultsArray[0].points[3]} Points
+        ${isCountryCorrectEmoji(resultsArray[3].isCountryCorrect[4])} ${cca2ToFlagEmoji(resultsArray[2].country[4])}  ${resultsArray[4].time[4]} | ${resultsArray[1].distance[4]} | ${resultsArray[0].points[4]} Points
         
         https://knowyouratlas.netlify.app/mb`;
         
@@ -481,10 +493,16 @@ window.addEventListener('DOMContentLoaded', (event) => {
             ]);
             let featureRoute = map.getSource('route')._options.data;
             console.log(featureRoute);
+            console.log(currentCountryData);
+            console.log(currentCountry);
+            console.log(currentCountryPoly);
             let line = turf.lineString([
                 [guessLon, guessLat],
                 [lon, lat]
             ]);
+            let guessPt = turf.point([guessLon, guessLat]);
+            let isInCountry = turf.booleanPointInPolygon(guessPt, currentCountryPoly);
+            console.log(isInCountry);
             let distance = turf.length(line);
             distance = distance * 1000;
             var distancePoints = Math.trunc(distance);
@@ -539,6 +557,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             resultsArray[0].points.push(Math.round(pointBar.value));
             resultsArray[1].distance.push(distance);
             resultsArray[2].country.push(countryCode);
+            resultsArray[3].isCountryCorrect.push(isInCountry);
             resultsArray[4].time.push(returnData(hour) + ':' + returnData(minute) + ':' + returnData(second));
             /*})*/
 
@@ -578,6 +597,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     map.removeSource('countries');
                 }
                 for (let i = 0; i < data.features.length; i++) {
+                    currentCountryData = data.features[i].geometry.coordinates;
+                    currentCountry = data.features[i].properties.A3;
                     console.log(data.features.length);
                     console.log(data.features[i].geometry.coordinates);
                     console.log(data.features[i].geometry.coordinates[0]);
@@ -595,6 +616,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                 data.features[i].geometry.coordinates[a]
                             ]);
                         }
+                        currentCountryPoly = poly;
                         let isInCountry = turf.booleanPointInPolygon(pt, poly);
                         if (i == data.features.length - 1 && a == data.features[i].geometry.coordinates.length - 1 && isInCountry == false) {
                             changeLoc();
