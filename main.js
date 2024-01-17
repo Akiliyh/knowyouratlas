@@ -21,10 +21,19 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let inputs;
     let completeTrigger;
 
+    // Fit to the width and align to the top of the canvas
+    let layout = new rive.Layout({
+        fit: rive.Fit.Contain,
+        alignment: rive.Alignment.Center,
+    });
+
+
+
     let r = new rive.Rive({
         src: './img/loading_kya.riv',
         canvas: document.getElementById('preloader'),
         autoplay: true,
+        layout: layout,
         stateMachines: 'State machine',
         onLoad: () => {
             r.resizeDrawingSurfaceToCanvas();

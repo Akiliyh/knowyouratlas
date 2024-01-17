@@ -8,7 +8,7 @@
 }
 
 *{
-    font-family: 'Satoshi';
+    font-family: 'Satoshi', sans-serif;
 }
 
 *::selection{
@@ -228,7 +228,7 @@ button.nmtz-btn .info{
     margin-left: auto;
     margin-right: auto;
     position: relative;
-    top: 12vh;
+    top: 7rem;
     z-index: 2;
 }
 
@@ -310,10 +310,19 @@ header{
     z-index: 3;
     text-align: center;
     color: white;
-    backdrop-filter: blur(5px);
 	box-shadow: 0 0 1.5rem 0 rgba(0, 0, 0, .2);	
 	background-color: #050a35b2;
     align-items: center;
+}
+
+header::after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
 }
 
 header svg{
@@ -530,11 +539,11 @@ height: 400px;
     left: 0;
     right: 0;
     text-align: center;
-    margin-bottom: 8%;
-    font-size: 1.5rem;
+    margin-bottom: 6rem;
+    font-size: 1.3rem;
     display: none;
     padding: 20px;
-    width: 30%;
+    width: fit-content;
     margin-left: auto;
     margin-right: auto;
     background-color: #000023;
@@ -554,7 +563,7 @@ height: 400px;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 5%;
+    margin-bottom: 3rem;
     display: none;
     width: fit-content;
 }
@@ -709,24 +718,29 @@ progress{
   
   progress::-webkit-progress-bar {
     background: white;
+    border-radius: 50px;
   }
 
   progress::-webkit-progress-value {
     background: linear-gradient(to right, #91FD9F, #28FF43);
+    border-radius: 50px;
   }
 
   
 progress::-moz-progress-bar {
     background: linear-gradient(to right, #91FD9F, #28FF43);
+    border-radius: 50px;
   }
 
   progress.perfect::-webkit-progress-bar {
     background: #B70C3E !important;
+    border-radius: 50px;
   }
 
   
 progress.perfect::-moz-progress-bar {
     background: #B70C3E !important;
+    border-radius: 50px;
   }
 
   .result-round{
