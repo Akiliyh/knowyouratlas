@@ -80,6 +80,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let transition = document.querySelector('.transition');
     let burgerMenu = document.querySelector('.menu-burger');
     let closeMenuBtn = document.querySelector('.fa-xmark');
+    let currentModeDiv = document.querySelector('.current-mode');
+    let guessDivPoints = document.querySelector('.guessDivPoints');
+    let currentPointsDiv = document.querySelector('.guessDivPoints .total-points');
+    let totalPointsDiv = document.querySelector('.guessDivPoints .max-points');
+    let totalPoints = 0;
+    let maxPoints = 0;
+    let currentMode = 'Normal';
     let menu = document.querySelector('.social-media-burger');
     let resultsArray = [];
     let currentCountryData = null;
@@ -99,13 +106,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function displayResults(e) {
-        let currentMode = 'Normal';
-        if (NMTZMode === true) {
-            currentMode = "NMTZ";
-        }
-        if (easyMode === true) {
-            currentMode = "Easy";
-        }
         transition.classList.remove('activated');
         container.classList.remove('activated');
         setTimeout(() => {
@@ -113,6 +113,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             container.classList.add('activated');
         }, 10);
         gameDiv.remove();
+        distanceSection.remove();
+        resultsBtn.remove();
 
         const resultsBox = document.createElement('div');
         resultsBox.classList.add('results-box');
@@ -123,6 +125,32 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
         resultsTitle.innerHTML = 'Results:';
         resultsBox.appendChild(resultsTitle);
+
+        const resultsTime = document.createElement('div');
+        resultsTime.classList.add('resultsTime');
+
+        let totalSeconds = 0;
+        let totalMinutes = 0;
+        let totalHours = 0;
+        console.log(resultsArray[5].mathTime);
+
+        // Assuming you have separate arrays for seconds, minutes, and hours in resultsArray
+        for (let i = 0; i < 5; i++) {
+            totalSeconds += resultsArray[5].mathTime.seconds[i];
+            totalMinutes += resultsArray[5].mathTime.minutes[i];
+            totalHours += resultsArray[5].mathTime.hours[i];
+        }
+
+        // Convert seconds to minutes if necessary
+        totalMinutes += Math.floor(totalSeconds / 60);
+        totalSeconds %= 60;
+
+        // Convert minutes to hours if necessary
+        totalHours += Math.floor(totalMinutes / 60);
+        totalMinutes %= 60;
+
+        resultsTime.innerHTML = `Total Time: ${returnData(totalHours)}:${returnData(totalMinutes)}:${returnData(totalSeconds)}`;
+        resultsBox.appendChild(resultsTime);
 
         for (let i = 0; i <= 4; i++) {
             const roundDiv = document.createElement('div');
@@ -141,7 +169,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
             const flagDiv = document.createElement('div');
             flagDiv.classList.add('flag');
             fetchCountryFlags(resultsArray[2].country[i]).then(cca2Code => {
-                console.log(cca2Code);
                 resultsArray[2].country[i] = cca2Code;
                 flagDiv.classList.add('flag-icon-' + cca2Code, 'flag-icon', 'countryFlag');
             });
@@ -218,13 +245,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
         resultsDiv.appendChild(buttonsDiv);
 
         function isCountryCorrectEmoji(value) {
-           return value ? '✅' : '❌'
+            return value ? '✅' : '❌'
         }
 
         copyBtnElement.addEventListener('click', async () => {
             // Replace 'i' with your desired index value
             const resultText = `🌍 Know Your Atlas (@KnowYourAtlasGame)
         ${currentMode} Mode - ${totalPoints}/5000 - ${new Date().toDateString()}
+
+        ⏱️ Total Time: ${returnData(totalHours)}:${returnData(totalMinutes)}:${returnData(totalSeconds)} ⏱️
         
         ${isCountryCorrectEmoji(resultsArray[3].isCountryCorrect[0])} ${cca2ToFlagEmoji(resultsArray[2].country[0])}  ${resultsArray[4].time[0]} | ${resultsArray[1].distance[0]} | ${resultsArray[0].points[0]} Points
         ${isCountryCorrectEmoji(resultsArray[3].isCountryCorrect[1])} ${cca2ToFlagEmoji(resultsArray[2].country[1])}  ${resultsArray[4].time[1]} | ${resultsArray[1].distance[1]} | ${resultsArray[0].points[1]} Points
@@ -233,23 +262,23 @@ window.addEventListener('DOMContentLoaded', (event) => {
         ${isCountryCorrectEmoji(resultsArray[3].isCountryCorrect[4])} ${cca2ToFlagEmoji(resultsArray[2].country[4])}  ${resultsArray[4].time[4]} | ${resultsArray[1].distance[4]} | ${resultsArray[0].points[4]} Points
         
         https://knowyouratlas.netlify.app/mb`;
-        
+
             try {
                 // Create a temporary textarea to hold the text to be copied
                 const tempTextArea = document.createElement('textarea');
                 tempTextArea.value = resultText;
                 document.body.appendChild(tempTextArea);
-        
+
                 // Select the text in the textarea
                 tempTextArea.select();
                 tempTextArea.setSelectionRange(0, 99999); // for mobile devices
-        
+
                 // Copy the selected text to the clipboard
                 document.execCommand('copy');
-        
+
                 // Remove the temporary textarea
                 document.body.removeChild(tempTextArea);
-        
+
                 // Notify the user that the text has been copied
                 spanElement.innerHTML = 'Copied!';
             } catch (error) {
@@ -259,11 +288,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function cca2ToFlagEmoji(cca2) {
-            return cca2.toUpperCase().replace(/./g, char => 
-                String.fromCodePoint(127397 + char.charCodeAt())
-            );          
+        return cca2.toUpperCase().replace(/./g, char =>
+            String.fromCodePoint(127397 + char.charCodeAt())
+        );
     }
-    
+
 
     const fetchCountryFlags = async (code) => {
         const apiUrl = `https://restcountries.com/v3.1/alpha?codes=${code}`;
@@ -282,7 +311,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         } catch (error) {
             console.error('Error fetching countries:', error.message);
         }
-    };  
+    };
 
     function displayGameModes(e) {
         let home = document.querySelector('.home');
@@ -308,7 +337,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function playGame(e) {
-        resultsArray = [{ "points": [] }, { "distance": [] }, { "country": [] }, { "isCountryCorrect": [] }, { "time": [] }];
+        if (NMTZMode === true) {
+            currentMode = "NMTZ";
+        }
+        if (easyMode === true) {
+            currentMode = "Easy";
+        }
+        currentModeDiv.innerHTML = `${currentMode} Mode`
+        resultsArray = [{ "points": [] }, { "distance": [] }, { "country": [] }, { "isCountryCorrect": [] }, { "time": [] }, { "mathTime": { "hours": [], "minutes": [], "seconds": [] } }];
         preloader.style.opacity = '1';
         mapboxgl.accessToken = 'pk.eyJ1IjoiYWtpbGl5aCIsImEiOiJja2RzdHgyaTAwdXl3MnBsaXJreXVvOXUwIn0.6TuTIZ-EC67QJO-s6saNeA';
 
@@ -338,8 +374,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
             projection: 'mercator' // display the map as a 3D globe
         });
 
-
-        map.addControl(new mapboxgl.NavigationControl());
+        if (!NMTZMode) {
+            map.addControl(new mapboxgl.NavigationControl());
+        }
         guessMap.dragRotate.disable();
 
 
@@ -413,13 +450,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
             guessMapContainer.style.cursor = 'crosshair';
         })
 
-        document.onkeyup = function (e) {
-            if (e.ctrlKey && e.which == 81) {
+        /*document.onkeydown = function (e) {
+            if (e.altKey && e.which == 81) {
                 map.setMinZoom([1]);
             }
-        };
+        };*/
 
         guessBtn.addEventListener('click', (e) => {
+            guessDivPoints.classList.add('guessed');
             stopTimer();
 
             /*map.setStyle('mapbox://styles/akiliyh/cl9pdy42q00ns15l3f0kz8o46');*/ // Style load poses problème, coupure + réafficher point de départ 
@@ -580,16 +618,26 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 pitch: 0,
                 duration: 4000
             });
+            maxPoints += 1000;
+            totalPointsDiv.innerHTML = maxPoints;
+            totalPoints += Math.round(pointBar.value);
+            currentPointsDiv.innerHTML = totalPoints;
             resultsArray[0].points.push(Math.round(pointBar.value));
             resultsArray[1].distance.push(distance);
             resultsArray[2].country.push(countryCode);
             resultsArray[3].isCountryCorrect.push(isInCountry);
             resultsArray[4].time.push(returnData(hour) + ':' + returnData(minute) + ':' + returnData(second));
+            resultsArray[5].mathTime.hours.push(hour);
+            resultsArray[5].mathTime.minutes.push(minute);
+            resultsArray[5].mathTime.seconds.push(second);
             /*})*/
 
         });
 
         nextBtn.addEventListener('click', (e) => {
+            guessDivPoints.classList.remove('guessed');
+            guessDiv.style.visibility = "hidden";
+            guessDivPoints.style.overflow = "hidden";
             updateGameCount();
             resetTimer();
             completeTrigger.fire();
@@ -649,7 +697,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             // recharge la local à chaque fois que le programme détecte que le point est à l'extérieur de chaque pays
                         }
                         countryCode = data.features[i].properties.A3;
-                        console.log(countryCode + ' ' + isInCountry);
+                        /*console.log(countryCode + ' ' + isInCountry);*/
                         if (isInCountry == true) { // if location valid
                             fetchCountries(countryCode);
                             if (map.getSource('point') == undefined && map.getLayer('point') == undefined) {
@@ -683,7 +731,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 })
                 .then(function (data) {
                     isInsideCountry(data);
-                }) 
+                })
 
             const fetchCountries = async (countryCode) => {
                 const apiUrl = `https://restcountries.com/v3.1/alpha?codes=${countryCode}`;
@@ -717,7 +765,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             guessMap.setZoom([2]);
             lon = (Math.random() - 0.5) * 360;
             lat = (Math.random() - 0.5) * 100;
-            console.log(lat + ' ' + lon);
+            /*console.log(lat + ' ' + lon);*/ /* Location of the map */
             pitch = 0;
             bearing = 0;
             if (easyMode != true) {
@@ -775,11 +823,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 if (elevation <= 0) {
                     changeLoc();
                 } else {
-                    console.log(completeTrigger);
                     completeTrigger.fire();
                     setTimeout(() => {
                         preloader.style.display = 'none';
                         gameDiv.style.visibility = "visible";
+                        guessDiv.style.visibility = "visible";
+                        guessDivPoints.style.overflow = "visible";
                         startTimer();
                     }, 1000);
                 }

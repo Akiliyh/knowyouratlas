@@ -2,11 +2,11 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="./satoshi.css">
+    <link rel="stylesheet" href="./style.css">
     <meta charset="utf-8">
-    <title>KNOW YOUR ATLAS</title>
-    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>KNOW YOUR ATLAS - A Geography Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="./img/KYA.svg">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
@@ -17,30 +17,32 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <header>
-    <a class="kyalogo" href="."><img src="./img/KYA.svg" alt="KYA's Logo"></a>
-    <h1> <a href=".">KNOW YOUR ATLAS</a></h1>
-    <div class="social-media">
-        <script src="https://unpkg.com/@rive-app/canvas"></script>
-        <i class="fa-solid fa-circle-info" title="Changelog"></i>
-        <a href="https://twitter.com/knowyouratlas">
-            <i class="fa-brands fa-x-twitter"></i>
-        </a>
-        <a href="https://www.instagram.com/knowyouratlasgame/">
-            <i class="fa-brands fa-instagram"></i>
-        </a>
-    </div>
-    <i class="fa-solid fa-bars menu-burger"></i>
-    <div class="social-media-burger">
-        <i class="fa-solid fa-xmark fa-2x"></i>
+    <nav>
+        <a class="kyalogo" href="."><img src="./img/KYA.svg" alt="KYA's Logo"></a>
         <h1> <a href=".">KNOW YOUR ATLAS</a></h1>
-        <i class="fa-solid fa-circle-info fa-5x" title="Changelog"></i>
-        <a href="https://twitter.com/knowyouratlas">
-            <i class="fa-brands fa-x-twitter fa-5x"></i>
-        </a>
-        <a href="https://www.instagram.com/knowyouratlasgame/">
-            <i class="fa-brands fa-instagram fa-5x"></i>
-        </a>
-    </div>
+        <div class="social-media">
+            <script src="https://unpkg.com/@rive-app/canvas"></script>
+            <i class="fa-solid fa-circle-info" title="Changelog"></i>
+            <a href="https://twitter.com/knowyouratlas">
+                <i class="fa-brands fa-x-twitter"></i>
+            </a>
+            <a href="https://www.instagram.com/knowyouratlasgame/">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+        </div>
+        <i class="fa-solid fa-bars menu-burger"></i>
+        <div class="social-media-burger">
+            <i class="fa-solid fa-xmark fa-2x"></i>
+            <h1> <a href=".">KNOW YOUR ATLAS</a></h1>
+            <i class="fa-solid fa-circle-info fa-5x" title="Changelog"></i>
+            <a href="https://twitter.com/knowyouratlas">
+                <i class="fa-brands fa-x-twitter fa-5x"></i>
+            </a>
+            <a href="https://www.instagram.com/knowyouratlasgame/">
+                <i class="fa-brands fa-instagram fa-5x"></i>
+            </a>
+        </div>
+    </nav>
 </header>
 
 <body>
@@ -83,22 +85,24 @@
                             <i class="fa-solid fa-chevron-left fa-xl" color="white"></i>
                         </a>
                         <div class="btn-container">
-                            <button class="easy-btn">
+                            <button class="easy-btn" title="Take it easy, you have labels to help you!">
                                 <h3>Easy</h3>
                                 <i class="fa-solid fa-circle-info info fa-xs"
                                     title="Take it easy, you have labels to help you!"></i>
                             </button>
                         </div>
                         <div class="btn-container">
-                            <button class="normal-btn">
+                            <button class="normal-btn" title="Normal mode of KYA. Test your geography skills!">
                                 <h3>Normal</h3>
                                 <i class="fa-solid fa-circle-info info fa-xs"
                                     title="Normal mode of KYA. Test your geography skills!"></i>
                             </button>
                         </div>
                         <div class="btn-container">
-                            <button class="nmtz-btn">
+                            <button class="nmtz-btn"
+                                title="No Move, no Tilt and no Zoom. This mode is only for Geography GOATs">
                                 <h3>NMTZ</h3>
+                                <h3 class="questionMarks">??????</h3>
                                 <i class="fa-solid fa-circle-info info fa-xs"
                                     title="No Move, no Tilt and no Zoom. This mode is only for Geography GOATs"></i>
                             </button>
@@ -120,33 +124,43 @@
                 <div class="timer" style="visibility: visible;">
                     <i class="fa-solid fa-clock"></i>
                     <span class="hour">00</span>:<span class="minute">00</span>:<span class="second">00</span>
+                    -
+                    <span class="current-mode">Normal mode</span>
                 </div>
                 <div class="buttons">
                     <!-- <button class="change">Change location</button> -->
                     <button class="reset">Reset location</button>
                 </div>
             </div>
-            
+
             <div class="guessSection">
                 <div class="guessDiv">
                     <div id="guessMap"></div>
                 </div>
-                <button class="guess">
-                    <i class="fa-solid fa-circle-check"></i>
-                    Validate point</button>
+                <div class="guessDivPoints">
+                    <span class="current-points"  title="Your total points">
+                        <i class="fa-solid fa-star"></i>
+                        <span><span class="total-points">0</span> / <span class="max-points">0</span></span>
+                    </span>
+                </div>
             </div>
-            <div class="distanceSection">
-                <p>You were located in <span class="countryName"></span><span
-                        class="flag-icon countryFlag flag-icon-squared"></span>!</p>
-                <div class="distance"></div>
-                <progress class="pointBar" max="1000"> </progress>
-                <div class="points"></div>
-            </div>
-            <button class="next">Next Round</button>
-            <button class="resultsBtn">View Results</button>
+            <button class="guess">
+                <i class="fa-solid fa-circle-check"></i>
+                Validate point
+            </button>
         </div>
+        <div class="distanceSection">
+            <p>You were located in <span class="countryName"></span><span
+                    class="flag-icon countryFlag flag-icon-squared"></span>!</p>
+            <div class="distance"></div>
+            <progress class="pointBar" max="1000"> </progress>
+            <div class="points"></div>
+        </div>
+        <button class="next">Next Round</button>
+        <button class="resultsBtn">View Results</button>
         <div class="results"></div>
-        <script src="./main.js"></script>
+    </div>
+    <script src="./main.js"></script>
     </div>
 </body>
 
