@@ -2,6 +2,35 @@
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
+    function preventZoom() {
+        document.addEventListener("keydown", function (e) {
+            if (
+              e.ctrlKey &&
+              (e.keyCode == "61" ||
+                e.keyCode == "107" ||
+                e.keyCode == "173" ||
+                e.keyCode == "109" ||
+                e.keyCode == "187" ||
+                e.keyCode == "189")
+            ) {
+              e.preventDefault();
+            }
+          });
+          document.addEventListener(
+            "wheel",
+            function (e) {
+              if (e.ctrlKey) {
+                e.preventDefault();
+              }
+            },
+            {
+              passive: false
+            }
+          );
+    }
+
+    preventZoom();
+
     /* Rive animations */
 
     /*let riveInfoAnims = document.querySelectorAll(".canvas");
@@ -106,8 +135,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function displayResults(e) {
+        document.body.style.overflow = "visible";
         transition.classList.remove('activated');
         container.classList.remove('activated');
+        container.style.height = "fit-content";
+        document.body.style.height = "unset";
         setTimeout(() => {
             transition.classList.add('activated');
             container.classList.add('activated');
@@ -316,6 +348,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
     function displayGameModes(e) {
         let home = document.querySelector('.home');
         home.remove();
+        window.scrollTo(0,0);
+        document.body.style.overflow = "hidden";
+
         gameModes.style.display = "block";
         let normalBtn = document.querySelector('.normal-btn');
         let nmtzBtn = document.querySelector('.nmtz-btn');
@@ -337,6 +372,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function playGame(e) {
+        container.style.margin = 0;
         if (NMTZMode === true) {
             currentMode = "NMTZ";
         }
@@ -362,7 +398,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             bearing: 0
         });
 
-        if (easyMode == true) {
+        if (easyMode === true || NMTZMode === true) {
             map.setStyle('mapbox://styles/akiliyh/cl9pdy42q00ns15l3f0kz8o46');
         }
 
@@ -635,6 +671,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         });
 
         nextBtn.addEventListener('click', (e) => {
+            resultsDiv.style.display = "block";
             guessDivPoints.classList.remove('guessed');
             guessDiv.style.visibility = "hidden";
             guessDivPoints.style.overflow = "hidden";
@@ -701,20 +738,22 @@ window.addEventListener('DOMContentLoaded', (event) => {
                         if (isInCountry == true) { // if location valid
                             fetchCountries(countryCode);
                             if (map.getSource('point') == undefined && map.getLayer('point') == undefined) {
+                                map.on('load', function () {
                                 map.addSource('point', {
                                     'type': 'geojson',
                                     'data': pointLoc(0)
                                 });
-                                map.addLayer({
-                                    'id': 'point',
-                                    'source': 'point',
-                                    'type': 'circle',
-                                    'paint': {
-                                        'circle-radius': 10,
-                                        'circle-color': '#28FF43',
-                                        'circle-stroke-color': '#000023',
-                                        'circle-stroke-width': 2,
-                                    }
+                                    map.addLayer({
+                                        'id': 'point',
+                                        'source': 'point',
+                                        'type': 'circle',
+                                        'paint': {
+                                            'circle-radius': 10,
+                                            'circle-color': '#28FF43',
+                                            'circle-stroke-color': '#000023',
+                                            'circle-stroke-width': 2,
+                                        }
+                                    });
                                 });
                             }
                             return
@@ -772,7 +811,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 bearing = randomIntFromInterval(0, 360);
             }
 
-            pitch = randomIntFromInterval(0, 85);
+            pitch = randomIntFromInterval(0, 75);
             if (NMTZMode == true) {
                 map.scrollZoom.disable();
                 map.dragRotate.disable();
