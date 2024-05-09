@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "country-data": "^0.0.31",
+    "country-iso-2-to-3": "^1.1.0",
+    "ol": "^7.1.0"
+  }
+}

@@ -2,50 +2,28 @@
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
+    console.log('%c Hey! 🌎🌍🌏', 'font-size: 16px; color: #91FD9F; font-weight: bold;');
+    console.log('%c Pshhht! You can find the coords here:', 'font-size: 16px; color: #91FD9F; font-weight: bold;');
+    console.log('%c https://ko-fi.com/gboucher 👁️👁️', 'font-size: 16px; color: #91FD9F; font-weight: bold;');
+
+    // Prevent the player from zooming out the map and cheat
+
     function preventZoom() {
-        document.addEventListener("keydown", function (e) {
-            if (
-              e.ctrlKey &&
-              (e.keyCode == "61" ||
-                e.keyCode == "107" ||
-                e.keyCode == "173" ||
-                e.keyCode == "109" ||
-                e.keyCode == "187" ||
-                e.keyCode == "189")
-            ) {
-              e.preventDefault();
-            }
-          });
-          document.addEventListener(
-            "wheel",
-            function (e) {
-              if (e.ctrlKey) {
+        document.addEventListener("keydown", e => {
+            if (e.ctrlKey && ["61", "107", "173", "109", "187", "189"].includes(e.keyCode)) {
                 e.preventDefault();
-              }
-            },
-            {
-              passive: false
             }
-          );
+        });
+
+        document.addEventListener("wheel", e => {
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
+        }, { passive: false });
     }
 
+
     preventZoom();
-
-    /* Rive animations */
-
-    /*let riveInfoAnims = document.querySelectorAll(".canvas");
-    for (let riveInfoAnim of riveInfoAnims){
-        console.log('lmao')
-        riveInfoAnim.classList.add('info')
-        new rive.Rive({
-            src: "./img/loading_kya.riv",
-            canvas: document.querySelector(".info"),
-            autoplay: true,
-            fit: rive.Fit.cover,
-            antialiasing: true,
-        });
-        riveInfoAnim.classList.remove('info')
-    }*/
 
     let inputs;
     let completeTrigger;
@@ -55,8 +33,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         fit: rive.Fit.Contain,
         alignment: rive.Alignment.Center,
     });
-
-
 
     let r = new rive.Rive({
         src: './img/loading_kya.riv',
@@ -117,7 +93,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let maxPoints = 0;
     let currentMode = 'Normal';
     let menu = document.querySelector('.social-media-burger');
+    let pbNormal = document.querySelector('.pb-normal');
+    let pbEasy = document.querySelector('.pb-easy');
+    let pbNMTZ = document.querySelector('.pb-nmtz');
     let resultsArray = [];
+    let resultsTimeString = '';
     let currentCountryData = null;
     let currentCountry = null;
     let currentCountryPoly = null;
@@ -125,6 +105,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     resultsBtn.addEventListener('click', displayResults);
     burgerMenu.addEventListener('click', displayMenu);
     closeMenuBtn.addEventListener('click', closeMenu);
+    /*localStorage.clear();*/
 
     function displayMenu(e) {
         menu.classList.add('opened');
@@ -134,7 +115,78 @@ window.addEventListener('DOMContentLoaded', (event) => {
         menu.classList.remove('opened');
     }
 
+    // Function to store game data in localStorage for a specific game mode
+    function storeGameData(score, gameMode, time) {
+        // Retrieve existing game data or initialize an empty object if none exists
+        let gameData = JSON.parse(localStorage.getItem('gameData')) || {};
+
+        const newData = {
+            score: score,
+            time: time
+        };
+
+        gameData[gameMode] = newData;
+
+        // Store the updated best scores back in localStorage
+        localStorage.setItem('gameData', JSON.stringify(gameData));
+    }
+
+    // Function to retrieve best score from localStorage for a specific game mode
+    function retrieveGameData(gameMode) {
+        // Retrieve game data from localStorage
+        const gameData = JSON.parse(localStorage.getItem('gameData'));
+
+        // Check if gameData exists and if the gameMode exists within it
+        if (gameData && gameData[gameMode]) {
+            return gameData[gameMode];
+        } else {
+            return null; // Return an object with null values if no data found for the specified game mode
+        }
+    }
+
     function displayResults(e) {
+        let totalSeconds = 0;
+        let totalMinutes = 0;
+        let totalHours = 0;
+        console.log(resultsArray[5].mathTime);
+
+        for (let i = 0; i < 5; i++) {
+            totalSeconds += resultsArray[5].mathTime.seconds[i];
+            totalMinutes += resultsArray[5].mathTime.minutes[i];
+            totalHours += resultsArray[5].mathTime.hours[i];
+        }
+
+        // Convert seconds to minutes
+        totalMinutes += Math.floor(totalSeconds / 60);
+        totalSeconds %= 60;
+
+        // Convert minutes to hours
+        totalHours += Math.floor(totalMinutes / 60);
+        totalMinutes %= 60;
+
+        let totalPoints = 0;
+
+        for (let i = 0; i < resultsArray[0].points.length; i++) {
+            totalPoints += resultsArray[0].points[i];
+        }
+        const existingData = retrieveGameData(currentMode);
+        const existingScore = existingData ? existingData.score : null;
+        let isNewPb = false;
+        if (existingScore) {
+            if (totalPoints > existingScore) {
+                // Call storeGameData only if the score is a new personal best
+                isNewPb = true;
+                storeGameData(totalPoints, currentMode, `${returnData(totalHours)}:${returnData(totalMinutes)}:${returnData(totalSeconds)}`);
+            }
+        } else {
+            isNewPb = true;
+            storeGameData(totalPoints, currentMode, `${returnData(totalHours)}:${returnData(totalMinutes)}:${returnData(totalSeconds)}`);
+        }
+
+        const currentPB = retrieveGameData(currentMode);
+        console.log('Your current PB on ' + currentMode + ' is: ');
+        console.log(currentPB);
+
         document.body.style.overflow = "visible";
         transition.classList.remove('activated');
         container.classList.remove('activated');
@@ -158,28 +210,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
         resultsTitle.innerHTML = 'Results:';
         resultsBox.appendChild(resultsTitle);
 
-        const resultsTime = document.createElement('div');
-        resultsTime.classList.add('resultsTime');
+        const pb = document.createElement('div');
+        pb.classList.add('pb')
+        isNewPb ? pb.classList.add('new-record') : pb.classList.add('pb');
 
-        let totalSeconds = 0;
-        let totalMinutes = 0;
-        let totalHours = 0;
-        console.log(resultsArray[5].mathTime);
-
-        // Assuming you have separate arrays for seconds, minutes, and hours in resultsArray
-        for (let i = 0; i < 5; i++) {
-            totalSeconds += resultsArray[5].mathTime.seconds[i];
-            totalMinutes += resultsArray[5].mathTime.minutes[i];
-            totalHours += resultsArray[5].mathTime.hours[i];
+        pb.innerHTML = `${isNewPb ? '<i class="fa-solid fa-crown"></i> New PB!' : '<i class="fa-solid fa-crown"></i> Your PB is ' + retrieveGameData(currentMode).score + ' points' }`;
+        if (isNewPb) {
+            resultsBox.appendChild(pb);
         }
 
-        // Convert seconds to minutes if necessary
-        totalMinutes += Math.floor(totalSeconds / 60);
-        totalSeconds %= 60;
-
-        // Convert minutes to hours if necessary
-        totalHours += Math.floor(totalMinutes / 60);
-        totalMinutes %= 60;
+        const resultsTime = document.createElement('div');
+        resultsTime.classList.add('resultsTime');
 
         resultsTime.innerHTML = `Total Time: ${returnData(totalHours)}:${returnData(totalMinutes)}:${returnData(totalSeconds)}`;
         resultsBox.appendChild(resultsTime);
@@ -221,11 +262,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
         const resultsPoints = document.createElement('div');
         resultsPoints.classList.add('resultsPoints');
-        let totalPoints = 0;
-
-        for (let i = 0; i < resultsArray[0].points.length; i++) {
-            totalPoints += resultsArray[0].points[i];
-        }
 
         resultsPoints.innerHTML = `Total Points: ${totalPoints}/5000`;
         resultsBox.appendChild(resultsPoints);
@@ -235,6 +271,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
         resultsMode.innerHTML = `${currentMode} Mode`;
         resultsBox.appendChild(resultsMode);
+
+        if (!isNewPb) {
+            resultsBox.appendChild(pb);
+        }
 
         const anchorElement = document.createElement('a');
         anchorElement.href = './';
@@ -280,12 +320,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
             return value ? '✅' : '❌'
         }
 
+        // Copy results
+
         copyBtnElement.addEventListener('click', async () => {
-            // Replace 'i' with your desired index value
             const resultText = `🌍 Know Your Atlas (@KnowYourAtlasGame)
         ${currentMode} Mode - ${totalPoints}/5000 - ${new Date().toDateString()}
 
         ⏱️ Total Time: ${returnData(totalHours)}:${returnData(totalMinutes)}:${returnData(totalSeconds)} ⏱️
+
+        ${isNewPb ? 'New PB!' : 'Your PB is ' + retrieveGameData(currentMode).score}
         
         ${isCountryCorrectEmoji(resultsArray[3].isCountryCorrect[0])} ${cca2ToFlagEmoji(resultsArray[2].country[0])}  ${resultsArray[4].time[0]} | ${resultsArray[1].distance[0]} | ${resultsArray[0].points[0]} Points
         ${isCountryCorrectEmoji(resultsArray[3].isCountryCorrect[1])} ${cca2ToFlagEmoji(resultsArray[2].country[1])}  ${resultsArray[4].time[1]} | ${resultsArray[1].distance[1]} | ${resultsArray[0].points[1]} Points
@@ -293,7 +336,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         ${isCountryCorrectEmoji(resultsArray[3].isCountryCorrect[3])} ${cca2ToFlagEmoji(resultsArray[2].country[3])}  ${resultsArray[4].time[3]} | ${resultsArray[1].distance[3]} | ${resultsArray[0].points[3]} Points
         ${isCountryCorrectEmoji(resultsArray[3].isCountryCorrect[4])} ${cca2ToFlagEmoji(resultsArray[2].country[4])}  ${resultsArray[4].time[4]} | ${resultsArray[1].distance[4]} | ${resultsArray[0].points[4]} Points
         
-        https://knowyouratlas.netlify.app/mb`;
+        https://knowyouratlas.com`;
 
             try {
                 // Create a temporary textarea to hold the text to be copied
@@ -319,12 +362,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
         });
     }
 
+    // Translate cca2 data to emoji name
+
     function cca2ToFlagEmoji(cca2) {
         return cca2.toUpperCase().replace(/./g, char =>
             String.fromCodePoint(127397 + char.charCodeAt())
         );
     }
 
+    // Get Flag icons
 
     const fetchCountryFlags = async (code) => {
         const apiUrl = `https://restcountries.com/v3.1/alpha?codes=${code}`;
@@ -346,9 +392,19 @@ window.addEventListener('DOMContentLoaded', (event) => {
     };
 
     function displayGameModes(e) {
+        const easyData = retrieveGameData('Easy');
+        pbEasy.innerHTML = easyData ? `<i class="fa-solid fa-crown fa-xs"></i><span> ${easyData.score} points in ${easyData.time}</span>` : '';
+        easyData ? pbEasy.classList.add('record') : pbEasy.remove();
+        const normalData = retrieveGameData('Normal');
+        pbNormal.innerHTML = normalData ? `<i class="fa-solid fa-crown fa-xs"></i><span> ${normalData.score} points in ${normalData.time}</span>` : '';
+
+        normalData ? pbNormal.classList.add('record') : pbNormal.remove();
+        const nmtzData = retrieveGameData('NMTZ');
+        pbNMTZ.innerHTML = nmtzData ? `<i class="fa-solid fa-crown fa-xs"></i><span> ${nmtzData.score} points in ${nmtzData.time}</span>` : '';
+        nmtzData ? pbNMTZ.classList.add('record') : pbNMTZ.remove();
         let home = document.querySelector('.home');
         home.remove();
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
         document.body.style.overflow = "hidden";
 
         gameModes.style.display = "block";
@@ -373,12 +429,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     function playGame(e) {
         container.style.margin = 0;
-        if (NMTZMode === true) {
-            currentMode = "NMTZ";
-        }
-        if (easyMode === true) {
-            currentMode = "Easy";
-        }
+        NMTZMode ? currentMode = "NMTZ" : easyMode ? currentMode = "Easy" : currentMode = "Normal";
         currentModeDiv.innerHTML = `${currentMode} Mode`
         resultsArray = [{ "points": [] }, { "distance": [] }, { "country": [] }, { "isCountryCorrect": [] }, { "time": [] }, { "mathTime": { "hours": [], "minutes": [], "seconds": [] } }];
         preloader.style.opacity = '1';
@@ -413,17 +464,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
         if (!NMTZMode) {
             map.addControl(new mapboxgl.NavigationControl());
         }
-        guessMap.dragRotate.disable();
-
+        guessMap.dragRotate.disable(); // disable roation on guess map
 
         changeLoc();
-
-
-        /*setInterval(function () {
-            guessMap.resize();
-        }, 10);*/
-
-
 
         guessMap.on('click', (e) => {
             console.log(e.lngLat);
@@ -436,7 +479,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 };
             }
 
-            // Guess points !!!!!!
+            // Guess points
 
             if (guessMap.getSource('point') != undefined) {
                 console.log(guessMap.getSource('point').setData(guessPointLoc()));
@@ -469,9 +512,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         })
 
         let changeLocBtn = document.querySelector('.change');
-        if (changeLocBtn) {
-            changeLocBtn.addEventListener('click', changeLoc);
-        }
+        changeLocBtn?.addEventListener('click', changeLoc);
         let resetLocBtn = document.querySelector('.reset');
         resetLocBtn.addEventListener('click', resetLoc);
         let guessDiv = document.querySelector('.guessDiv');
@@ -486,6 +527,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             guessMapContainer.style.cursor = 'crosshair';
         })
 
+        /* Dev debbug */
+
         /*document.onkeydown = function (e) {
             if (e.altKey && e.which == 81) {
                 map.setMinZoom([1]);
@@ -495,9 +538,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         guessBtn.addEventListener('click', (e) => {
             guessDivPoints.classList.add('guessed');
             stopTimer();
-
-            /*map.setStyle('mapbox://styles/akiliyh/cl9pdy42q00ns15l3f0kz8o46');*/ // Style load poses problème, coupure + réafficher point de départ 
-            /*map.on('style.load', e =>{*/
             map.setMinZoom([1]);
             distanceSection.style.display = 'block';
             if (game === 5) {
@@ -553,27 +593,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     'line-width': 7,
                 }
             });
-            map.addSource('countries', { // problème fait apparaitre les frontières sur la mer. Faire apparaitre labels + enlever frontières sur zoom low
+            map.addSource('countries', {
                 type: 'vector',
                 url: 'mapbox://mapbox.country-boundaries-v1'
             });
-
-            /*map.addLayer(
-                {
-                'id': 'countries-join',
-                'type': 'line',
-                'source': 'countries',
-                'source-layer': 'country_boundaries',
-                'layout': {
-                    'line-join': 'round',
-                    'line-cap': 'round'
-                },
-                'paint': {
-                    'line-color': 'rgb(187, 187, 187)',
-                    'line-width': 1,
-                }
-            }, 'route'
-                );*/
             map.addLayer(
                 {
                     'id': 'correct-country',
@@ -666,7 +689,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
             resultsArray[5].mathTime.hours.push(hour);
             resultsArray[5].mathTime.minutes.push(minute);
             resultsArray[5].mathTime.seconds.push(second);
-            /*})*/
 
         });
 
@@ -696,7 +718,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }
 
         function changeLoc(e) {
-            console.clear();
+            /*console.clear();*/
 
             function isInsideCountry(data) {
                 if (map.getSource('countriesIn') != undefined && map.getLayer('countriesIn') != undefined) {
@@ -739,10 +761,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             fetchCountries(countryCode);
                             if (map.getSource('point') == undefined && map.getLayer('point') == undefined) {
                                 map.on('load', function () {
-                                map.addSource('point', {
-                                    'type': 'geojson',
-                                    'data': pointLoc(0)
-                                });
+                                    map.addSource('point', {
+                                        'type': 'geojson',
+                                        'data': pointLoc(0)
+                                    });
                                     map.addLayer({
                                         'id': 'point',
                                         'source': 'point',
@@ -907,8 +929,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         clearInterval(cron);
     }
 
-    // régler problème timer qui ne s'update pas quand tu quitte la page, faire en sorte garder time dans local storage when initialisation and compare with time when going back
-    // mauvaises secondes ?? pour 10 ms on augmente les milli de 15 mais ça semble ok à l'oeil jsp
+    // TODO change the timer method to include time spent outside the tab opened
 
     function resetTimer() {
         stopwatch.style.display = 'none';

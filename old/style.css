@@ -1,0 +1,260 @@
+body{
+    /* overflow-y: hidden;
+    overflow-x: hidden; */
+    background-color: #1D2731;
+    color: white;
+    font-family: 'Montserrat';
+    margin: 0;
+}
+
+button:hover{
+    cursor: pointer;
+}
+
+header{
+    width: 100%;
+    background-color: #0D3C5D;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.info{
+    display: none;
+}
+
+h2{
+    text-align: center;
+}
+
+h2 a{
+    text-decoration: none;
+    color: white;
+}
+
+progress{
+    display: block;
+    width: 50%;
+    appearance: none;
+    border: none;   
+    margin: 10px auto;
+}
+  
+  progress::-webkit-progress-bar {
+    background: #0D3C5D;
+  }
+
+  
+progress::-moz-progress-bar {
+    background: #0D3C5D;
+  }
+
+  progress.perfect::-webkit-progress-bar {
+    background: #B70C3E !important;
+  }
+
+  
+progress.perfect::-moz-progress-bar {
+    background: #B70C3E !important;
+  }
+
+.ol-control{
+    visibility: hidden;
+    opacity: 0;
+    transition: .5s;
+}
+
+.ol-hidden{
+    visibility: hidden !important;
+}
+
+.game{
+    display: none;
+}
+
+.game-modes{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+   
+}
+
+.game-modes button{
+    width: 250px;
+    font-size: 1rem;
+}
+
+.map:hover .ol-control, .guessMap:hover .ol-control{
+    visibility: visible;
+    opacity: 1;
+}
+
+.map,.testMap{
+    z-index: -1;
+    height: calc(300px + 10vh); /* calc(400px + 5vw)*/
+    width: 80%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: #0D3C5D solid 5px;
+    overflow: hidden;
+}
+
+.distance,.next,.restart, .points, .distanceResults{
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.next{
+    visibility: hidden;
+    margin-bottom: 1rem;
+}
+
+.custom-mouse-position{
+    display: none;
+}
+
+.earth{
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 5rem;
+    user-select: none;
+}
+
+.over{
+    text-align: center;
+}
+
+.guessMap{
+    overflow: hidden;
+    z-index: 2;
+    border: #0D3C5D solid 5px;
+    display: block;
+    margin-left: auto;
+    width: 30%;
+    height: 200px;
+    visibility: hidden;
+}
+
+.guessDiv{
+    display: block;
+    margin-left: auto;
+    width: 30%;
+    transition: .5s ease;
+}
+
+.guessBtn{
+    margin-top: .5rem;
+    margin-left: auto;
+    display: block;
+    visibility: hidden;
+    width: 10rem;
+font-size: 1rem;
+height: 2rem;
+background-color: #B70C3E;
+}
+
+.guessBtn:hover{
+    background-color: #740829;
+}
+
+.guessSection:hover .guessMap{
+    width: 30% !important;
+    height: 200px !important;
+    margin-top: -100px;
+}
+
+.map{
+    visibility: hidden;
+}
+
+.preloader{
+    display: none;
+    margin-left: auto;
+    margin-right: auto;
+    width: 10rem;
+    z-index: -1;
+    margin-top: 10rem
+}
+
+.top-bar{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.timer{
+    visibility: hidden;
+    display: block;
+    width: 100px;
+}
+
+.buttons{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px;
+}
+
+.buttons button, .next, .restart{
+    width: 150px;
+    font-size: 1rem;
+    height: 2rem;
+}
+
+.playButtons{
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+.playButtons button{
+    height: 2.5rem;
+    background-color: #0D3C5D;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 10rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+button{
+    height: 2.5rem;
+    background-color: #0D3C5D;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 20rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+button:hover{
+    background-color: #152f47;
+}
+
+.atlas{
+    margin-top: 5rem;
+}
+
+.red{
+    background-color: #B70C3E !important;
+}
+
+.red:hover{
+    background-color: #740829 !important;
+}
+
+@media(max-height:750px) {
+    .map{
+        height: calc(150px + 15vh);
+    }
+}

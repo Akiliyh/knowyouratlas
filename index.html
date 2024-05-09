@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
     <link rel="stylesheet" href="./satoshi.css">
@@ -7,47 +7,52 @@
     <meta charset="utf-8">
     <title>KNOW YOUR ATLAS - A Geography Game</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <!-- Prevent the user from zooming out the map and cheat -->
+    <meta name="description"
+        content="Explore the world with Know Your Atlas - Guess locations on 3D maps, and test your geography knowledge. Play now and see how well you know your atlas!">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
     <link rel="icon" type="image/x-icon" href="./img/KYA.svg">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
     <script src="https://unpkg.com/@rive-app/canvas@1.0.79"></script>
     <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        crossorigin="anonymous" referrerpolicy="no-referrer">
 </head>
-<header>
-    <nav>
-        <a class="kyalogo" href="."><img src="./img/KYA.svg" alt="KYA's Logo"></a>
-        <h1> <a href=".">KNOW YOUR ATLAS</a></h1>
-        <div class="social-media">
-            <script src="https://unpkg.com/@rive-app/canvas"></script>
-            <i class="fa-solid fa-circle-info" title="Changelog"></i>
-            <a href="https://twitter.com/knowyouratlas">
-                <i class="fa-brands fa-x-twitter"></i>
-            </a>
-            <a href="https://www.instagram.com/knowyouratlasgame/">
-                <i class="fa-brands fa-instagram"></i>
-            </a>
-        </div>
-        <i class="fa-solid fa-bars menu-burger"></i>
-        <div class="social-media-burger">
-            <i class="fa-solid fa-xmark fa-2x"></i>
-            <h1> <a href=".">KNOW YOUR ATLAS</a></h1>
-            <i class="fa-solid fa-circle-info fa-5x" title="Changelog"></i>
-            <a href="https://twitter.com/knowyouratlas">
-                <i class="fa-brands fa-x-twitter fa-5x"></i>
-            </a>
-            <a href="https://www.instagram.com/knowyouratlasgame/">
-                <i class="fa-brands fa-instagram fa-5x"></i>
-            </a>
-        </div>
-    </nav>
-</header>
 
 <body>
+    <header>
+        <nav>
+            <a class="kyalogo" href="."><img src="./img/KYA.svg" alt="KYA's Logo"></a>
+            <h1> <a href=".">KNOW YOUR ATLAS</a></h1>
+            <div class="social-media">
+                <script src="https://unpkg.com/@rive-app/canvas"></script>
+                <i class="fa-solid fa-circle-info" title="Changelog"></i>
+                <a href="https://twitter.com/knowyouratlas">
+                    <i class="fa-brands fa-x-twitter"></i>
+                </a>
+                <a href="https://www.instagram.com/knowyouratlasgame/">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+            </div>
+            <i class="fa-solid fa-bars menu-burger"></i>
+            <div class="social-media-burger">
+                <i class="fa-solid fa-xmark fa-2x"></i>
+                <h1> <a href=".">KNOW YOUR ATLAS</a></h1>
+                <i class="fa-solid fa-circle-info fa-5x" title="Changelog"></i>
+                <a href="https://twitter.com/knowyouratlas">
+                    <i class="fa-brands fa-x-twitter fa-5x"></i>
+                </a>
+                <a href="https://www.instagram.com/knowyouratlasgame/">
+                    <i class="fa-brands fa-instagram fa-5x"></i>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="transition activated"></div>
     <div class="container activated">
-        <div class="transition activated"></div>
         <canvas class="preloader" id="preloader" style="width: 300px; height: 300px;"></canvas>
         <div class="home">
             <div class="grid">
@@ -71,7 +76,24 @@
                     <img class="earth" src="./img/earth.png" alt="">
                 </div>
             </div>
-            <div class="bar"></div>
+            <!-- <div class="bar"></div> -->
+            <div class="grid">
+                <div class="left-section">
+                    <img class="illu" src="./img/kya-illu.webp" alt="">
+                </div>
+                <div class="right-section">
+                    <div>
+                        <h2>Challenge your geography <span class="underlined">skills!</span></h2>
+                    </div>
+                    <p>Test your knowledge across 5 exciting rounds, each presenting a unique 3D map for you to
+                        decipher. With three distinct game modes – Easy, Normal, and NMTZ – tailor the challenge to your
+                        expertise. Immerse yourself in the experience by tilting and rotating relief satellite maps,
+                        providing a unique perspective on global locations. Showcase your geography prowess, earn
+                        points, and uncover fascinating facts about the world. Share your results with friends and let
+                        the world witness your mastery of the atlas. Play now and discover the joy of exploring the
+                        globe from every angle!</p>
+                </div>
+            </div>
         </div>
         <div class="game-modes">
             <div>
@@ -82,35 +104,49 @@
                     <p>Choose your game mode</p>
                     <div class="game-modes-btns">
                         <a class="back" href="./">
-                            <i class="fa-solid fa-chevron-left fa-xl" color="white"></i>
+                            <i class="fa-solid fa-chevron-left fa-xl"></i>
                         </a>
                         <div class="btn-container">
                             <button class="easy-btn" title="Take it easy, you have labels to help you!">
-                                <h3>Easy</h3>
+                                <span>Easy</span>
                                 <i class="fa-solid fa-circle-info info fa-xs"
                                     title="Take it easy, you have labels to help you!"></i>
                             </button>
+                            <div class="pb-easy">
+                                <i class="fa-solid fa-crown fa-xs">
+                                </i>
+                                <span></span>
+                            </div>
                         </div>
                         <div class="btn-container">
                             <button class="normal-btn" title="Normal mode of KYA. Test your geography skills!">
-                                <h3>Normal</h3>
+                                <span>Normal</span>
                                 <i class="fa-solid fa-circle-info info fa-xs"
-                                    title="Normal mode of KYA. Test your geography skills!"></i>
+                                    title="Normal mode of KYA. Test your geography skills!">
+                                </i>
                             </button>
+                            <div class="pb-normal">
+                                <i class="fa-solid fa-crown fa-xs">
+                                </i>
+                                <span></span>
+                            </div>
                         </div>
                         <div class="btn-container">
                             <button class="nmtz-btn"
                                 title="No Move, no Tilt and no Zoom. This mode is only for Geography GOATs">
-                                <h3>NMTZ</h3>
-                                <h3 class="questionMarks">??????</h3>
+                                <span>NMTZ</span>
+                                <span class="questionMarks">??????</span>
                                 <i class="fa-solid fa-circle-info info fa-xs"
                                     title="No Move, no Tilt and no Zoom. This mode is only for Geography GOATs"></i>
                             </button>
+                            <div class="pb-nmtz">
+                                <i class="fa-solid fa-crown fa-xs">
+                                </i>
+                                <span></span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="pattern"></div>
-                <div class="bar"></div>
             </div>
         </div>
         <div class="game">
@@ -138,7 +174,7 @@
                     <div id="guessMap"></div>
                 </div>
                 <div class="guessDivPoints">
-                    <span class="current-points"  title="Your total points">
+                    <span class="current-points" title="Your total points">
                         <i class="fa-solid fa-star"></i>
                         <span><span class="total-points">0</span> / <span class="max-points">0</span></span>
                     </span>
@@ -161,7 +197,6 @@
         <div class="results"></div>
     </div>
     <script src="./main.js"></script>
-    </div>
 </body>
 
 </html>
