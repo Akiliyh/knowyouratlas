@@ -806,6 +806,8 @@ progress {
     border-radius: 50px
 }
 
+/* Progress bar */
+
 progress::-webkit-progress-bar {
     background: #fff;
     border-radius: 50px
