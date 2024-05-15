@@ -214,7 +214,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         pb.classList.add('pb')
         isNewPb ? pb.classList.add('new-record') : pb.classList.add('pb');
 
-        pb.innerHTML = `${isNewPb ? '<i class="fa-solid fa-crown"></i> New PB!' : '<i class="fa-solid fa-crown"></i> Your PB is ' + retrieveGameData(currentMode).score + ' points' }`;
+        pb.innerHTML = `${isNewPb ? '<i class="fa-solid fa-crown"></i> New PB!' : '<i class="fa-solid fa-crown"></i> Your PB is ' + retrieveGameData(currentMode).score + ' points'}`;
         if (isNewPb) {
             resultsBox.appendChild(pb);
         }
@@ -295,25 +295,19 @@ window.addEventListener('DOMContentLoaded', (event) => {
         copyBtnElement.appendChild(iconElement);
         copyBtnElement.appendChild(spanElement);
 
-        // Create the h3 element
         const h3Element = document.createElement('h3');
         h3Element.textContent = 'Try again!';
 
-        // Append the h3 element to the button
         buttonElement.appendChild(h3Element);
 
-        // Append the button to the anchor
         anchorElement.appendChild(buttonElement);
 
-        // Create the div with class "buttons"
         const buttonsDiv = document.createElement('div');
         buttonsDiv.classList.add('buttons');
 
-        // Append the anchor to the div
         buttonsDiv.appendChild(copyBtnElement);
         buttonsDiv.appendChild(anchorElement);
 
-        // Append the div to the document body or any other desired parent element
         resultsDiv.appendChild(buttonsDiv);
 
         function isCountryCorrectEmoji(value) {
@@ -354,7 +348,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 // Remove the temporary textarea
                 document.body.removeChild(tempTextArea);
 
-                // Notify the user that the text has been copied
                 spanElement.innerHTML = 'Copied!';
             } catch (error) {
                 console.error('Error copying to clipboard:', error.message);
@@ -384,8 +377,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
             const data = await response.json();
             return data[0].cca2.toLowerCase();
-
-            // Process the data as needed
         } catch (error) {
             console.error('Error fetching countries:', error.message);
         }
@@ -814,13 +805,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
                         console.error('No country data found.');
                     }
 
-                    // Process the data as needed
                 } catch (error) {
                     console.error('Error fetching countries:', error.message);
                 }
             };
-
-
 
             guessMap.setCenter([0, 0]);
             guessMap.setZoom([2]);
@@ -929,7 +917,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         clearInterval(cron);
     }
 
-    // TODO change the timer method to include time spent outside the tab opened
+    // TODO change the timer method to include time spent outside the tab
 
     function resetTimer() {
         stopwatch.style.display = 'none';
